@@ -15,7 +15,7 @@ The base class for all interactables.
 
 **Member Variables**
 
-`public UnityEvent InteractionResponse`  - Users can drag and drop functions here that will be called when the response is triggered
+```c# public UnityEvent InteractionResponse```  - Users can drag and drop functions here that will be called when the response is triggered
 
 `public bool InteractableOnAwake` - Whether or not a user can interact with this object right away
 
