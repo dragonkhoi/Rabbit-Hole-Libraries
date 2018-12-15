@@ -2,25 +2,30 @@
 using System.Collections.Generic;
 using UnityEngine;
 using RHL.Scripts.Interactable;
+using UnityEngine.Events;
 
 namespace RHL.Scripts.InputSystem
 {
     public class RHControllerBase : MonoBehaviour
     {
         [SerializeField]
-        private bool CheckRayHit;
+        private bool CheckRayHit = true;
 
         [SerializeField]
-        private bool CheckRayExit;
+        private bool CheckRayExit = true;
 
         [SerializeField]
-        private bool CheckRayTrigger;
+        private bool CheckRayTrigger = true;
 
         [SerializeField]
         private KeyCode simulatedTriggerKey = KeyCode.Space;
 
         private GameObject lastObjectInteracted;
 
+        public UnityEvent OnRayHitInteractable;
+        public UnityEvent OnRayExitInteractable;
+
+        public bool RayHitInteractable { get; set; }
 
         public bool TriggerPulled
         {
@@ -43,6 +48,8 @@ namespace RHL.Scripts.InputSystem
         // Update is called once per frame
         void Update()
         {
+            RayHitInteractable = false;
+
             if (CheckRayHit || CheckRayExit || CheckRayTrigger)
             {
                 RaycastHit raycastHit;
@@ -62,6 +69,11 @@ namespace RHL.Scripts.InputSystem
                         if (interactableRayHit != null)
                         {
                             interactableRayHit.TriggerResponse();
+                        }
+                        if (lastObjectInteracted.GetComponent<RHInteractable>() != null)
+                        {
+                            RayHitInteractable = true;
+                            OnRayHitInteractable.Invoke();
                         }
                     }
                     // If we are checking for trigger interaction
@@ -103,6 +115,7 @@ namespace RHL.Scripts.InputSystem
                     interactableRayExit.TriggerResponse();
                 }
                 lastObjectInteracted = null;
+                OnRayExitInteractable.Invoke();
             }
         }
     }

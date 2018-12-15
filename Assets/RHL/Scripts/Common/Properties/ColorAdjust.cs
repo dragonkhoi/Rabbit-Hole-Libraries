@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-namespace RHL.Scripts.Common
+namespace RHL.Scripts.Common.Properties
 {
-    public class PropertyAdjuster : MonoBehaviour
+    public class ColorAdjust : MonoBehaviour
     {
         [SerializeField]
         private Color color;
@@ -10,16 +10,10 @@ namespace RHL.Scripts.Common
 
         private Renderer thisRenderer;
 
-        [SerializeField]
-        private float largerSizeMultiplier = 1.1f;
-
-        private Vector3 originalSize;
-
         private void Start()
         {
             thisRenderer = GetComponent<Renderer>();
             originalColor = thisRenderer.material.color;
-            originalSize = transform.localScale;
         }
 
         public void ChangeMaterialColor()
@@ -30,18 +24,6 @@ namespace RHL.Scripts.Common
         public void ResetMaterialColor()
         {
             thisRenderer.material.color = originalColor;
-        }
-
-        public void ToggleSize()
-        {
-            if (transform.localScale == originalSize)
-            {
-                transform.localScale *= largerSizeMultiplier;
-            }
-            else
-            {
-                transform.localScale = originalSize;
-            }
         }
 
         public void ToggleMaterialColor()
