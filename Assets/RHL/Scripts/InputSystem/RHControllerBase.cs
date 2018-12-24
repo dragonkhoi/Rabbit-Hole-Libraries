@@ -25,6 +25,8 @@ namespace RHL.Scripts.InputSystem
         public UnityEvent OnRayHitInteractable;
         public UnityEvent OnRayExitInteractable;
 
+        // public UnityEvent On
+
         public bool RayHitInteractable { get; set; }
 
         public bool TriggerPulled
