@@ -18,6 +18,15 @@ namespace RHL.Scripts.InputSystem
         private bool CheckRayTrigger = true;
 
         [SerializeField]
+        private bool CheckTouchEnter = true;
+
+        [SerializeField]
+        private bool CheckTouchExit = true;
+
+        [SerializeField]
+        private bool CheckTouchTrigger = true;
+
+        [SerializeField]
         private KeyCode simulatedTriggerKey = KeyCode.Space;
 
         private GameObject lastObjectInteracted;
@@ -25,26 +34,25 @@ namespace RHL.Scripts.InputSystem
         public UnityEvent OnRayHitInteractable;
         public UnityEvent OnRayExitInteractable;
 
-        // public UnityEvent On
+        public UnityEvent OnTouchEnterInteractable;
+        public UnityEvent OnTouchExitInteractable;
 
+        /// <summary>
+        /// Returns whether this controller's
+        /// ray hit an interactable this frame.
+        /// </summary>
         public bool RayHitInteractable { get; set; }
 
+        /// <summary>
+        /// Returns whether this controller's
+        /// primary trigger was pulled this frame.
+        /// </summary>
         public bool TriggerPulled
         {
-            private set
-            {
-                TriggerPulled = value;
-            }
             get
             {
-                return OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger) || UnityEngine.Input.GetKeyDown(simulatedTriggerKey);
+                return OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger) || Input.GetKeyDown(simulatedTriggerKey);
             }
-        }
-
-        // Use this for initialization
-        void Start()
-        {
-
         }
 
         // Update is called once per frame
@@ -74,8 +82,7 @@ namespace RHL.Scripts.InputSystem
                         }
                         if (lastObjectInteracted.GetComponent<RHInteractable>() != null)
                         {
-                            RayHitInteractable = true;
-                            OnRayHitInteractable.Invoke();
+                            InvokeRayHit();
                         }
                     }
                     // If we are checking for trigger interaction
@@ -106,6 +113,44 @@ namespace RHL.Scripts.InputSystem
             }
         }
 
+        public void InvokeRayHit()
+        {
+            RayHitInteractable = true;
+            OnRayHitInteractable.Invoke();
+        }
+
+        public void InvokeRayExit()
+        {
+            lastObjectInteracted = null;
+            OnRayExitInteractable.Invoke();
+        }
+
+        public void InvokeTouchEnter()
+        {
+            OnTouchEnterInteractable.Invoke();
+        }
+
+        public void InvokeTouchExit()
+        {
+            OnTouchExitInteractable.Invoke();
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (CheckTouchEnter)
+            {
+                InvokeTouchEnter();
+            }
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (CheckTouchExit)
+            {
+                InvokeTouchExit();
+            }
+        }
+
         private void SendRayExit()
         {
             // Ensure that the ray was previously hitting an object
@@ -116,8 +161,7 @@ namespace RHL.Scripts.InputSystem
                 {
                     interactableRayExit.TriggerResponse();
                 }
-                lastObjectInteracted = null;
-                OnRayExitInteractable.Invoke();
+                InvokeRayExit();
             }
         }
     }
