@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace RHL.Scripts.Movement {
-  
+
   public class PlayerMovement : MonoBehaviour {
 
     private bool isWalking;
@@ -31,6 +31,7 @@ namespace RHL.Scripts.Movement {
   	
   	void Update () {
   		if (OVRInput.Get(OVRInput.Button.PrimaryTouchpad) && WalkingAllowed) {
+        // this currently only works with the right hand controller
         controllerRotation = OVRInput.GetLocalControllerRotation(OVRInput.Controller.RTrackedRemote);
 
         primayTouchpadPos = OVRInput.Get(OVRInput.Axis2D.PrimaryTouchpad);
