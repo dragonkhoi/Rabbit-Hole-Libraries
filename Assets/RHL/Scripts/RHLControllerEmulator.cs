@@ -17,6 +17,10 @@ namespace RHL.Scripts.Common
 
         private void Start()
         {
+        #if UNITY_ANDROID
+            // If we are on the Go, no need to emulate.
+            Destroy(this);
+        #endif
             StartCoroutine(ActivateGoRemote());
         }
 

@@ -8,6 +8,7 @@ namespace RHL.Scripts.Movement {
 
     private bool isWalking;
     private CharacterController character;
+    private Quaternion controllerRotation;
     private Vector2 primayTouchpadPos;
 
     [SerializeField] private float walkingSpeed = 5.0f;
