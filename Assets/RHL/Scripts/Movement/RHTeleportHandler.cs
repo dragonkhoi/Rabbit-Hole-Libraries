@@ -26,10 +26,14 @@ public class RHTeleportHandler : MonoBehaviour {
 	public float playerHeight;
 	//this offsets the teleport destination by a vertical amount
 
+	private bool justTeleported = false;
 	void Update() {
 		RaycastHit hit = fire();
-		if (TriggerPulled) { //TODO: check the RHL TriggerPulled boolean
+		if (TriggerPulled && !justTeleported) { //TODO: check the RHL TriggerPulled boolean
 			playerObject.transform.position = hit.point + new Vector3(0f, playerHeight, 0f);
+			justTeleported = true;
+		} else if (!TriggerPulled) { //another one to fix
+			justTeleported = false;
 		}
 	}
 
